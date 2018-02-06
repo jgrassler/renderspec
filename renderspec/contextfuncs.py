@@ -62,7 +62,7 @@ def _context_url_pypi(context):
         '%s/%s/%s-%s.tar.gz' % (name[0], name, name, version)
 
 
-def _context_upstream_version(context, pkg_version=None):
+def _context_upstream_version(context, pkg_version=None, pypi_name=None):
     """return the version which should be set to the 'upstream_version'
     variable in the jinja context"""
     if pkg_version:
@@ -71,7 +71,8 @@ def _context_upstream_version(context, pkg_version=None):
         # try to auto-detect the version - for that we need the pypi name
         _context_check_variable(context, CONTEXT_VAR_PYPI_NAME,
                                 'upstream_version')
-        pypi_name = context.vars[CONTEXT_VAR_PYPI_NAME]
+        if pypi_name is None:
+            pypi_name = context.vars[CONTEXT_VAR_PYPI_NAME]
 
         # look for archives in:
         # 1) the output_dir
@@ -272,8 +273,8 @@ def _globals_url_pypi(context):
 
 
 @contextfunction
-def _globals_upstream_version(context, pkg_version=None):
-    return _context_upstream_version(context, pkg_version)
+def _globals_upstream_version(context, pkg_version=None, pypi_name=None):
+    return _context_upstream_version(context, pkg_version, pypi_name)
 
 
 @contextfunction
